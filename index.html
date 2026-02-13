@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valentine Surprise</title>
     <style>
-        * {
+        html, body {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            overflow: hidden;  /* Prevents any scrolling */
         }
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #ffb3ba, #ffdfba);
             color: #333;
             height: 100vh;
-            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -40,7 +40,7 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 20px;
+            padding: 10px;  /* Reduced padding for fit */
             opacity: 0;
             transition: opacity 0.5s ease;
         }
@@ -48,22 +48,22 @@
             opacity: 1;
         }
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2rem;  /* Reduced for mobile fit */
+            margin-bottom: 5px;
         }
         .subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
+            font-size: 1rem;  /* Reduced */
+            margin-bottom: 20px;
             color: #666;
         }
         .typewriter {
-            font-size: 1.5rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
+            font-size: 1.3rem;  /* Reduced */
+            line-height: 1.5;
+            margin-bottom: 20px;
             white-space: pre-line;
         }
         .big-text {
-            font-size: 2rem;
+            font-size: 1.8rem;  /* Reduced */
             animation: pulse 2s infinite;
         }
         @keyframes pulse {
@@ -75,11 +75,11 @@
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 15px 30px;
-            font-size: 1.2rem;
+            padding: 12px 25px;  /* Reduced padding */
+            font-size: 1.1rem;  /* Reduced */
             cursor: pointer;
             transition: background 0.3s, transform 0.3s;
-            margin: 10px;
+            margin: 5px;
         }
         button:hover {
             background: #ff1493;
@@ -105,6 +105,11 @@
             opacity: 0;
             transform: translateX(100%);
             transition: opacity 0.5s, transform 0.5s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;  /* Ensures slide fits screen */
         }
         .slide.active {
             opacity: 1;
@@ -112,17 +117,19 @@
         }
         .slide img {
             width: 100%;
+            max-height: 60vh;  /* Limits image height to fit screen */
             height: auto;
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;  /* Reduced */
+            object-fit: cover;  /* Ensures image fits without distortion */
         }
         .caption {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
+            font-size: 1.1rem;  /* Reduced */
+            margin-bottom: 10px;  /* Reduced */
         }
         .final-message {
-            font-size: 1.8rem;
-            line-height: 1.6;
+            font-size: 1.6rem;  /* Reduced */
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -192,6 +199,8 @@
     </div>
 
     <script>
+        alert('Website loaded! If you see this, JS is working. Click OK to continue.');  // Debug alert - remove after testing
+
         let currentScreen = 'intro';
         let currentSlide = 1;
         let yesScale = 1;
@@ -199,7 +208,7 @@
         let charIndex = 0;
 
         function nextScreen(screenId) {
-            console.log('Switching to screen:', screenId);  // Debug log
+            console.log('Switching to screen:', screenId);
             document.getElementById(currentScreen).classList.remove('active');
             document.getElementById(screenId).classList.add('active');
             currentScreen = screenId;
@@ -207,7 +216,7 @@
                 startTypewriter();
             }
             if (screenId === 'slideshow') {
-                console.log('Slideshow activated, current slide:', currentSlide);  // Debug log
+                console.log('Slideshow activated, current slide:', currentSlide);
             }
         }
 
@@ -232,20 +241,20 @@
         }
 
         function yesClicked() {
-            console.log('YES clicked, going to celebration');  // Debug log
+            console.log('YES clicked, going to celebration');
             nextScreen('celebration');
         }
 
         function nextSlide() {
-            console.log('Next slide clicked, current:', currentSlide);  // Debug log
+            console.log('Next slide clicked, current:', currentSlide);
             document.getElementById(`slide${currentSlide}`).classList.remove('active');
             currentSlide++;
             if (currentSlide <= 4) {
                 document.getElementById(`slide${currentSlide}`).classList.add('active');
-                console.log('Activated slide:', currentSlide);  // Debug log
+                console.log('Activated slide:', currentSlide);
             } else {
                 document.getElementById('final').classList.add('active');
-                console.log('Activated final message');  // Debug log
+                console.log('Activated final message');
             }
         }
     </script>
