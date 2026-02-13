@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine Surprise</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffb3ba, #ffdfba);
+            color: #333;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: #ff69b4;
+            animation: float 6s infinite linear;
+            opacity: 0.7;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+        .screen {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .screen.active {
+            opacity: 1;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .typewriter {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            white-space: pre-line;
+        }
+        .big-text {
+            font-size: 2rem;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        button {
+            background: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            margin: 10px;
+        }
+        button:hover {
+            background: #ff1493;
+            transform: scale(1.05);
+        }
+        .yes-btn {
+            transition: transform 0.3s;
+            z-index: 1;
+            position: relative;
+        }
+        .slideshow {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .slide {
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .slide img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .caption {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        .final-message {
+            font-size: 1.8rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts -->
+    <div class="heart" style="left: 10%; animation-delay: 0s;">❤️</div>
+    <div class="heart" style="left: 20%; animation-delay: 1s;">💖</div>
+    <div class="heart" style="left: 30%; animation-delay: 2s;">💕</div>
+    <div class="heart" style="left: 40%; animation-delay: 3s;">❤️</div>
+    <div class="heart" style="left: 50%; animation-delay: 4s;">💖</div>
+    <div class="heart" style="left: 60%; animation-delay: 5s;">💕</div>
+    <div class="heart" style="left: 70%; animation-delay: 6s;">❤️</div>
+    <div class="heart" style="left: 80%; animation-delay: 7s;">💖</div>
+    <div class="heart" style="left: 90%; animation-delay: 8s;">💕</div>
+
+    <!-- Intro Screen -->
+    <div id="intro" class="screen active">
+        <h1>Hi beautiful ❤️</h1>
+        <p class="subtitle">I made something special for you...</p>
+        <button onclick="nextScreen('message')">Open 💕</button>
+    </div>
+
+    <!-- Message Screen -->
+    <div id="message" class="screen">
+        <div class="typewriter" id="typewriter"></div>
+        <button onclick="nextScreen('question')">Continue 💌</button>
+    </div>
+
+    <!-- Question Screen -->
+    <div id="question" class="screen">
+        <h1 class="big-text">Will you be my Valentine?</h1>
+        <button id="yes-btn" class="yes-btn" onclick="yesClicked()">YES 💖</button>
+        <button onclick="noClicked()">NO 🙈</button>
+    </div>
+
+    <!-- Celebration Screen -->
+    <div id="celebration" class="screen">
+        <h1>Yay! I knew you would say that! 💖</h1>
+        <button onclick="nextScreen('slideshow')">Let's see some memories 💕</button>
+    </div>
+
+    <!-- Slideshow -->
+    <div id="slideshow" class="screen slideshow">
+        <div class="slide active" id="slide1">
+            <img src="photo1.jpg" alt="Memory 1">
+            <p class="caption">Our first date, unforgettable moments.</p>
+            <button onclick="nextSlide()">Next Memory 💕</button>
+        </div>
+        <div class="slide" id="slide2">
+            <img src="photo2.jpg" alt="Memory 2">
+            <p class="caption">Laughing together under the stars.</p>
+            <button onclick="nextSlide()">Next Memory 💕</button>
+        </div>
+        <div class="slide" id="slide3">
+            <img src="photo3.jpg" alt="Memory 3">
+            <p class="caption">Holding hands, feeling complete.</p>
+            <button onclick="nextSlide()">Next Memory 💕</button>
+        </div>
+        <div class="slide" id="slide4">
+            <img src="photo4.jpg" alt="Memory 4">
+            <p class="caption">Every smile you give lights up my world.</p>
+            <button onclick="nextSlide()">Next Memory 💕</button>
+        </div>
+        <div class="slide" id="final">
+            <p class="final-message">Thank you for being my favorite person.<br>I love you ❤️</p>
+        </div>
+    </div>
+
+    <script>
+        let currentScreen = 'intro';
+        let currentSlide = 1;
+        let yesScale = 1;
+        const messageText = "Every day with you feels like happiness.\nYou make my world softer and brighter.\nAnd today... I want to ask you something.";
+        let charIndex = 0;
+
+        function nextScreen(screenId) {
+            console.log('Switching to screen:', screenId);  // Debug log
+            document.getElementById(currentScreen).classList.remove('active');
+            document.getElementById(screenId).classList.add('active');
+            currentScreen = screenId;
+            if (screenId === 'message') {
+                startTypewriter();
+            }
+            if (screenId === 'slideshow') {
+                console.log('Slideshow activated, current slide:', currentSlide);  // Debug log
+            }
+        }
+
+        function startTypewriter() {
+            const typewriterEl = document.getElementById('typewriter');
+            typewriterEl.textContent = '';
+            charIndex = 0;
+            type();
+        }
+
+        function type() {
+            if (charIndex < messageText.length) {
+                document.getElementById('typewriter').textContent += messageText.charAt(charIndex);
+                charIndex++;
+                setTimeout(type, 50);
+            }
+        }
+
+        function noClicked() {
+            yesScale += 0.2;
+            document.getElementById('yes-btn').style.transform = `scale(${yesScale})`;
+        }
+
+        function yesClicked() {
+            console.log('YES clicked, going to celebration');  // Debug log
+            nextScreen('celebration');
+        }
+
+        function nextSlide() {
+            console.log('Next slide clicked, current:', currentSlide);  // Debug log
+            document.getElementById(`slide${currentSlide}`).classList.remove('active');
+            currentSlide++;
+            if (currentSlide <= 4) {
+                document.getElementById(`slide${currentSlide}`).classList.add('active');
+                console.log('Activated slide:', currentSlide);  // Debug log
+            } else {
+                document.getElementById('final').classList.add('active');
+                console.log('Activated final message');  // Debug log
+            }
+        }
+    </script>
+</body>
+</html>
