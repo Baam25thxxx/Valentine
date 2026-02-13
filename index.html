@@ -5,258 +5,293 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valentine Surprise</title>
     <style>
-        html, body {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            overflow: hidden;  /* Prevents any scrolling */
-        }
-        body {
+            overflow: hidden;
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #ffb3ba, #ffdfba);
-            color: #333;
+        }
+        #container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
+            flex-direction: column;
+            background: linear-gradient(to bottom, #ffb3ba, #ffdfba);
+            text-align: center;
+            color: #333;
+            transition: opacity 0.5s ease;
+        }
+        .fade-out {
+            opacity: 0;
+        }
+        .fade-in {
+            opacity: 1;
         }
         .heart {
             position: absolute;
-            font-size: 20px;
-            color: #ff69b4;
-            animation: float 6s infinite linear;
-            opacity: 0.7;
+            font-size: 24px;
+            color: rgba(255, 192, 203, 0.7);
+            animation: float 10s linear infinite;
+            pointer-events: none;
         }
         @keyframes float {
             0% { transform: translateY(100vh) rotate(0deg); }
             100% { transform: translateY(-100vh) rotate(360deg); }
         }
-        .screen {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 10px;  /* Reduced padding for fit */
-            opacity: 0;
-            transition: opacity 0.5s ease;
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff69b4;
+            animation: fall 3s linear infinite;
+            pointer-events: none;
         }
-        .screen.active {
-            opacity: 1;
+        @keyframes fall {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
         }
-        h1 {
-            font-size: 2rem;  /* Reduced for mobile fit */
-            margin-bottom: 5px;
+        .text {
+            font-size: 2rem;
+            margin-bottom: 1rem;
         }
-        .subtitle {
-            font-size: 1rem;  /* Reduced */
-            margin-bottom: 20px;
-            color: #666;
+        .subtext {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
         }
         .typewriter {
-            font-size: 1.3rem;  /* Reduced */
-            line-height: 1.5;
-            margin-bottom: 20px;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
             white-space: pre-line;
         }
         .big-text {
-            font-size: 1.8rem;  /* Reduced */
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            font-size: 3rem;
+            margin-bottom: 2rem;
         }
         button {
             background: #ff69b4;
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 12px 25px;  /* Reduced padding */
-            font-size: 1.1rem;  /* Reduced */
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: background 0.3s, transform 0.3s;
-            margin: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+            margin: 0.5rem;
         }
         button:hover {
-            background: #ff1493;
             transform: scale(1.05);
         }
-        .yes-btn {
-            transition: transform 0.3s;
+        .yes-button {
+            transition: transform 0.3s ease;
             z-index: 1;
             position: relative;
         }
-        .slideshow {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        .collage {
+            display: grid;
+            gap: 0.5rem;
+            max-width: 90vw;
+            max-height: 70vh;
+            margin-bottom: 1rem;
         }
-        .slide {
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: opacity 0.5s, transform 0.5s;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;  /* Ensures slide fits screen */
+        .collage img {
+            max-width: 100%;
+            max-height: 25vh;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 105, 180, 0.5);
+            transition: transform 0.3s ease;
+            filter: sepia(0.2) hue-rotate(320deg) brightness(1.1);
         }
-        .slide.active {
-            opacity: 1;
-            transform: translateX(0);
+        .collage img:hover {
+            transform: scale(1.05) rotate(5deg);
         }
-        .slide img {
-            width: 100%;
-            max-height: 60vh;  /* Limits image height to fit screen */
-            height: auto;
-            border-radius: 10px;
-            margin-bottom: 10px;  /* Reduced */
-            object-fit: cover;  /* Ensures image fits without distortion */
+        .single-image {
+            max-width: 90vw;
+            max-height: 70vh;
+            object-fit: contain;
+            margin-bottom: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 105, 180, 0.5);
+            filter: sepia(0.2) hue-rotate(320deg) brightness(1.1);
         }
         .caption {
-            font-size: 1.1rem;  /* Reduced */
-            margin-bottom: 10px;  /* Reduced */
-        }
-        .final-message {
-            font-size: 1.6rem;  /* Reduced */
-            line-height: 1.5;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            font-style: italic;
+            color: #d63384;
         }
     </style>
 </head>
 <body>
-    <!-- Floating Hearts -->
-    <div class="heart" style="left: 10%; animation-delay: 0s;">❤️</div>
-    <div class="heart" style="left: 20%; animation-delay: 1s;">💖</div>
-    <div class="heart" style="left: 30%; animation-delay: 2s;">💕</div>
-    <div class="heart" style="left: 40%; animation-delay: 3s;">❤️</div>
-    <div class="heart" style="left: 50%; animation-delay: 4s;">💖</div>
-    <div class="heart" style="left: 60%; animation-delay: 5s;">💕</div>
-    <div class="heart" style="left: 70%; animation-delay: 6s;">❤️</div>
-    <div class="heart" style="left: 80%; animation-delay: 7s;">💖</div>
-    <div class="heart" style="left: 90%; animation-delay: 8s;">💕</div>
-
-    <!-- Intro Screen -->
-    <div id="intro" class="screen active">
-        <h1>Hi beautiful ❤️</h1>
-        <p class="subtitle">I made something special for you...</p>
-        <button onclick="nextScreen('message')">Open 💕</button>
+    <audio id="music" src="romantic.mp3" loop></audio>
+    <div id="container" class="fade-in">
+        <!-- Content will be dynamically inserted here -->
     </div>
-
-    <!-- Message Screen -->
-    <div id="message" class="screen">
-        <div class="typewriter" id="typewriter"></div>
-        <button onclick="nextScreen('question')">Continue 💌</button>
-    </div>
-
-    <!-- Question Screen -->
-    <div id="question" class="screen">
-        <h1 class="big-text">Will you be my Valentine?</h1>
-        <button id="yes-btn" class="yes-btn" onclick="yesClicked()">YES 💖</button>
-        <button onclick="noClicked()">NO 🙈</button>
-    </div>
-
-    <!-- Celebration Screen -->
-    <div id="celebration" class="screen">
-        <h1>Yay! I knew you would say that! 💖</h1>
-        <button onclick="nextScreen('slideshow')">Let's see some memories 💕</button>
-    </div>
-
-    <!-- Slideshow -->
-    <div id="slideshow" class="screen slideshow">
-        <div class="slide active" id="slide1">
-            <img src="photo1.jpg" alt="Memory 1">
-            <p class="caption">Our first date, unforgettable moments.</p>
-            <button onclick="nextSlide()">Next Memory 💕</button>
-        </div>
-        <div class="slide" id="slide2">
-            <img src="photo2.jpg" alt="Memory 2">
-            <p class="caption">Laughing together under the stars.</p>
-            <button onclick="nextSlide()">Next Memory 💕</button>
-        </div>
-        <div class="slide" id="slide3">
-            <img src="photo3.jpg" alt="Memory 3">
-            <p class="caption">Holding hands, feeling complete.</p>
-            <button onclick="nextSlide()">Next Memory 💕</button>
-        </div>
-        <div class="slide" id="slide4">
-            <img src="photo4.jpg" alt="Memory 4">
-            <p class="caption">Every smile you give lights up my world.</p>
-            <button onclick="nextSlide()">Next Memory 💕</button>
-        </div>
-        <div class="slide" id="final">
-            <p class="final-message">Thank you for being my favorite person.<br>I love you ❤️</p>
-        </div>
-    </div>
-
     <script>
-        alert('Website loaded! If you see this, JS is working. Click OK to continue.');  // Debug alert - remove after testing
-
-        let currentScreen = 'intro';
-        let currentSlide = 1;
+        const container = document.getElementById('container');
+        const music = document.getElementById('music');
+        let currentScene = 1;
         let yesScale = 1;
-        const messageText = "Every day with you feels like happiness.\nYou make my world softer and brighter.\nAnd today... I want to ask you something.";
-        let charIndex = 0;
+        let slideshowIndex = 0;
+        const slideshow = [
+            { images: ['photo1.heic', 'photo2.heic'], caption: 'Our first moments together' },
+            { images: ['photo3.heic', 'photo4.heic', 'photo5.heic'], caption: 'Adventures we shared' },
+            { images: ['photo6.heic', 'photo7.heic', 'photo8.heic', 'photo9.heic'], caption: 'Laughs and smiles' },
+            { images: ['photo10.heic', 'photo11.heic', 'photo12.heic', 'photo13.heic', 'photo14.heic'], caption: 'Romantic evenings' },
+            { images: ['photo15.heic', 'photo16.heic', 'photo17.heic', 'photo18.heic', 'photo19.heic', 'photo20.heic'], caption: 'Forever memories' },
+            { image: 'photo21.heic', caption: 'You and me, forever' }
+        ];
 
-        function nextScreen(screenId) {
-            console.log('Switching to screen:', screenId);
-            document.getElementById(currentScreen).classList.remove('active');
-            document.getElementById(screenId).classList.add('active');
-            currentScreen = screenId;
-            if (screenId === 'message') {
-                startTypewriter();
-            }
-            if (screenId === 'slideshow') {
-                console.log('Slideshow activated, current slide:', currentSlide);
+        // Create floating hearts
+        for (let i = 0; i < 20; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDelay = Math.random() * 10 + 's';
+            heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            document.body.appendChild(heart);
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.background = ['#ff69b4', '#ffb3ba', '#ffdfba', '#ff69b4'][Math.floor(Math.random() * 4)];
+                document.body.appendChild(confetti);
+                setTimeout(() => {
+                    document.body.removeChild(confetti);
+                }, 3000);
             }
         }
 
-        function startTypewriter() {
+        function fadeOut(callback) {
+            container.classList.add('fade-out');
+            setTimeout(() => {
+                callback();
+                container.classList.remove('fade-out');
+                container.classList.add('fade-in');
+            }, 500);
+        }
+
+        function showScene1() {
+            container.innerHTML = `
+                <div class="text">Hi beautiful ❤️</div>
+                <div class="subtext">I made something special for you...</div>
+                <button onclick="nextScene()">Open 💕</button>
+            `;
+        }
+
+        function showScene2() {
+            container.innerHTML = `
+                <div class="typewriter" id="typewriter"></div>
+                <button onclick="nextScene()" style="display:none;" id="continueBtn">Continue 💌</button>
+            `;
+            const text = "Every day with you feels like happiness.\nYou make my world softer and brighter.\nAnd today... I want to ask you something.";
             const typewriterEl = document.getElementById('typewriter');
-            typewriterEl.textContent = '';
-            charIndex = 0;
-            type();
+            let i = 0;
+            const interval = setInterval(() => {
+                typewriterEl.textContent += text[i];
+                i++;
+                if (i >= text.length) {
+                    clearInterval(interval);
+                    document.getElementById('continueBtn').style.display = 'block';
+                }
+            }, 50);
         }
 
-        function type() {
-            if (charIndex < messageText.length) {
-                document.getElementById('typewriter').textContent += messageText.charAt(charIndex);
-                charIndex++;
-                setTimeout(type, 50);
+        function showScene3() {
+            container.innerHTML = `
+                <div class="big-text">Will you be my Valentine?</div>
+                <button class="yes-button" id="yesBtn" onclick="yesClicked()">YES 💖</button>
+                <button onclick="noClicked()">NO 🙈</button>
+            `;
+            document.getElementById('yesBtn').style.transform = `scale(${yesScale})`;
+        }
+
+        function showScene4() {
+            container.innerHTML = `
+                <div class="big-text">I knew you'd say that! 💕</div>
+                <button onclick="startSlideshow()">Continue 💌</button>
+            `;
+        }
+
+        function showSlideshow() {
+            if (slideshowIndex < slideshow.length) {
+                const slide = slideshow[slideshowIndex];
+                if (slide.images) {
+                    const cols = Math.min(slide.images.length, 3);
+                    let collageHTML = `<div class="collage" style="grid-template-columns: repeat(${cols}, 1fr);">`;
+                    slide.images.forEach(img => {
+                        const rotation = Math.random() * 20 - 10; // Random rotation between -10 and 10 degrees
+                        const offsetX = Math.random() * 20 - 10; // Random horizontal offset
+                        const offsetY = Math.random() * 20 - 10; // Random vertical offset
+                        collageHTML += `<img src="${img}" alt="Memory" style="transform: rotate(${rotation}deg) translate(${offsetX}px, ${offsetY}px);">`;
+                    });
+                    collageHTML += '</div>';
+                    container.innerHTML = `
+                        ${collageHTML}
+                        <div class="caption">${slide.caption}</div>
+                        <button onclick="nextSlide()">Next Memory 💕</button>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <img class="single-image" src="${slide.image}" alt="Memory">
+                        <div class="caption">${slide.caption}</div>
+                        <button onclick="nextSlide()">Next Memory 💕</button>
+                    `;
+                }
+            } else {
+                container.innerHTML = `
+                    <div class="big-text">I love you ❤️ Thank you</div>
+                `;
             }
         }
 
-        function noClicked() {
-            yesScale += 0.2;
-            document.getElementById('yes-btn').style.transform = `scale(${yesScale})`;
+        function nextScene() {
+            fadeOut(() => {
+                currentScene++;
+                if (currentScene === 2) showScene2();
+                else if (currentScene === 3) showScene3();
+            });
         }
 
         function yesClicked() {
-            console.log('YES clicked, going to celebration');
-            nextScreen('celebration');
+            createConfetti();
+            music.play();
+            fadeOut(() => {
+                showScene4();
+            });
+        }
+
+        function noClicked() {
+            yesScale *= 1.3;
+            document.getElementById('yesBtn').style.transform = `scale(${yesScale})`;
+        }
+
+        function startSlideshow() {
+            fadeOut(() => {
+                showSlideshow();
+            });
         }
 
         function nextSlide() {
-            console.log('Next slide clicked, current:', currentSlide);
-            document.getElementById(`slide${currentSlide}`).classList.remove('active');
-            currentSlide++;
-            if (currentSlide <= 4) {
-                document.getElementById(`slide${currentSlide}`).classList.add('active');
-                console.log('Activated slide:', currentSlide);
-            } else {
-                document.getElementById('final').classList.add('active');
-                console.log('Activated final message');
-            }
+            fadeOut(() => {
+                slideshowIndex++;
+                showSlideshow();
+            });
         }
+
+        // Start with scene 1
+        showScene1();
     </script>
 </body>
 </html>
